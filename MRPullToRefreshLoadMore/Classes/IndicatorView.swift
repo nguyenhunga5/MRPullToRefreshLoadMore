@@ -7,7 +7,7 @@ public class IndicatorView: UIView {
     
     public var indicatorTintColor: UIColor? {
         didSet {
-            circleLayer.strokeColor = (indicatorTintColor ?? UIColor.whiteColor()).CGColor
+            circleLayer.strokeColor = (indicatorTintColor ?? UIColor.white).cgColor
         }
     }
     
@@ -24,13 +24,13 @@ public class IndicatorView: UIView {
         startAnimation.fromValue = 0
         startAnimation.toValue = 1
         startAnimation.duration = 1.5
-        startAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        startAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
         
         let endAnimation = CABasicAnimation(keyPath: "strokeEnd")
         endAnimation.fromValue = 0
         endAnimation.toValue = 1
         endAnimation.duration = 2
-        endAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        endAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
         
         let group = CAAnimationGroup()
         group.duration = 2.5
@@ -43,7 +43,7 @@ public class IndicatorView: UIView {
     private let rotationAnimation: CAAnimation = {
         let animation = CABasicAnimation(keyPath: "transform.rotation.z")
         animation.fromValue = 0
-        animation.toValue = M_PI * 2
+        animation.toValue = Double.pi * 2
         animation.duration = 4
         animation.repeatCount = MAXFLOAT
         return animation
@@ -61,7 +61,7 @@ public class IndicatorView: UIView {
     private func setupViews() {
         circleLayer.lineWidth = 2
         circleLayer.fillColor = nil
-        circleLayer.strokeColor = UIColor.whiteColor().CGColor
+        circleLayer.strokeColor = UIColor.white.cgColor
         circleLayer.strokeStart = 0
         circleLayer.strokeEnd = 0
         layer.addSublayer(circleLayer)
@@ -73,12 +73,12 @@ public class IndicatorView: UIView {
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let radius = min(bounds.width, bounds.height) / 2 - circleLayer.lineWidth/2
         
-        let startAngle = CGFloat(-M_PI_2)
-        let endAngle = startAngle + CGFloat(M_PI * 2)
-        let path = UIBezierPath(arcCenter: CGPointZero, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+        let startAngle = CGFloat(-Double.pi / 2)
+        let endAngle = startAngle + CGFloat(Double.pi * 2)
+        let path = UIBezierPath(arcCenter: .zero, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
         
         circleLayer.position = center
-        circleLayer.path = path.CGPath
+        circleLayer.path = path.cgPath
     }
     
     func setAnimating(animating: Bool) {
@@ -89,12 +89,12 @@ public class IndicatorView: UIView {
     
     private func updateAnimation() {
         if animating {
-            circleLayer.addAnimation(strokeAnimations, forKey: "strokes")
-            circleLayer.addAnimation(rotationAnimation, forKey: "rotation")
+            circleLayer.add(strokeAnimations, forKey: "strokes")
+            circleLayer.add(rotationAnimation, forKey: "rotation")
         }
         else {
-            circleLayer.removeAnimationForKey("strokes")
-            circleLayer.removeAnimationForKey("rotation")
+            circleLayer.removeAnimation(forKey: "strokes")
+            circleLayer.removeAnimation(forKey: "rotation")
         }
     }
 }
